@@ -10,7 +10,7 @@ def table_to_dataframe():
     df = pd.read_sql_query(query, conn)
     return df
 
-def bucket_continuous_values(df, column, bins):
+def bucket_variable_values(df, column, bins):
     df[column + '_bucket'] = pd.cut(df[column], bins)
     return df
 
@@ -33,7 +33,7 @@ def plot_counts_bar(counts, column):
 df = table_to_dataframe()
 
 
-continuous_columns = ['age', 'trestbps', 'chol', 'thalach', 'oldpeak']
+selected_columns = ['age', 'trestbps', 'chol', 'thalach', 'oldpeak']
 bin_ranges = {'age': range(20, 100, 10),
               'trestbps': range(80, 210, 10),
               'chol': range(100, 600, 50),
@@ -41,8 +41,8 @@ bin_ranges = {'age': range(20, 100, 10),
               'oldpeak': [0, 1, 2, 3, 4, 5]}
 
 
-for column in continuous_columns:
-    df = bucket_continuous_values(df, column, bin_ranges[column])
+for column in selected_columns:
+    df = bucket_variable_values(df, column, bin_ranges[column])
     counts = generate_table_of_counts(df, column + '_bucket')
     print(f"Counts for {column} Buckets:")
     print(counts)
